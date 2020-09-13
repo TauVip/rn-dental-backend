@@ -1,16 +1,16 @@
 const express = require('express');
 const cors = require('cors');
-const bodyParser = require('body-parser');
 
 const db = require('./core/db');
+const patientValidation = require('./utils/validations/patient');
 const { PatientCtrl } = require('./controllers');
 
 const app = express();
-app.use(bodyParser.json());
+app.use(express.json());
 app.use(cors());
 
 app.get('/patients', PatientCtrl.all);
-app.post('/patients', PatientCtrl.create);
+app.post('/patients', patientValidation.create, PatientCtrl.create);
 
 app.listen(6666, function(err) {
   if (err) {
@@ -20,4 +20,4 @@ app.listen(6666, function(err) {
   console.log('Server running!');
 })
 
-// 1:11:36 / 2:06:33
+// Разработка стоматологического приложения на React Native #3  1:25:06 / 2:06:33
