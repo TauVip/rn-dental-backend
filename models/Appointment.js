@@ -8,7 +8,7 @@ const AppointmentSchema = new Schema(
     diagnosis: String,
     date: String,
     time: String,
-    userId: { type: Schema.Types.ObjectId, ref: 'Patient' }
+    patient: { type: Schema.Types.ObjectId, ref: 'Patient' }
   },
   {
     timestamps: true

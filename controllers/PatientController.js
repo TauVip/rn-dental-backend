@@ -4,12 +4,12 @@ const { Patient } = require('../models');
 function PatientController() {}
 
 const create = function(req, res) {
+  const errors = validationResult(req);
   const data = {
     fullname: req.body.fullname,
     phone: req.body.phone
   }
 
-  const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return res.status(422).json({
       success: false,
