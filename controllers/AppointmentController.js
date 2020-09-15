@@ -117,7 +117,7 @@ const remove = async function(req, res) {
 const all = function(req, res) {
   Appointment.find({})
     .populate('patient')
-    .exec(function(err, docs) {
+    .exec(function(err) {
       if (err) {
         return res.status(500).json({
           success: false,
@@ -126,8 +126,7 @@ const all = function(req, res) {
       }
 
       res.json({
-        status: 'success',
-        data: docs
+        status: 'success'
       })
     })
 }
