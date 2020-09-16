@@ -1,10 +1,15 @@
 const { validationResult } = require('express-validator');
+const dayjs = require('dayjs');
 const { Appointment, Patient } = require('../models');
+
+const { sendSMS } = require('../utils');
 
 function AppointmentController() {}
 
 const create = async function(req, res) {
   const errors = validationResult(req);
+  let patient;
+
   const data = {
     patient: req.body.patient,
     dentNumber: req.body.dentNumber,
@@ -22,7 +27,7 @@ const create = async function(req, res) {
   }
 
   try {
-    await Patient.findOne({ _id: data.patient });
+    patient = await Patient.findOne({ _id: data.patient });
   } catch (e) {
     return res.status(404).json({
       success: false,
@@ -37,6 +42,18 @@ const create = async function(req, res) {
         message: err
       })
     }
+
+    const delayedTime = dayjs(`${data.date.split('.').reverse().join('.')}T${data.time}`).subtract(1, 'minute').unix();
+
+    delayedSMS({
+      number: patient.phone,
+      time: delayedTime,
+      text: `Добрый день, ${patient.fullname}! Сегодня в ${data.time} у Вас приём в стоматологию "Granit".`
+    }).then(({ data }) => {
+      console.log(data)
+    }).catch(err => {
+      console.log(err)
+    })
 
     res.status(201).json({
       success: true,
@@ -81,8 +98,7 @@ const update = async function(req, res) {
       }
 
       res.json({
-        success: true,
-        data: doc
+        success: true
       })
     }
   )
@@ -117,7 +133,7 @@ const remove = async function(req, res) {
 const all = function(req, res) {
   Appointment.find({})
     .populate('patient')
-    .exec(function(err) {
+    .exec(function(err, docs) {
       if (err) {
         return res.status(500).json({
           success: false,
@@ -126,7 +142,8 @@ const all = function(req, res) {
       }
 
       res.json({
-        status: 'success'
+        status: 'success',
+        data: docs
       })
     })
 }

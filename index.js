@@ -13,6 +13,7 @@ app.get('/patients', PatientCtrl.all);
 app.post('/patients', patientValidation.create, PatientCtrl.create);
 app.delete('/patients/:id', PatientCtrl.remove);
 app.patch('/patients/:id', patientValidation.create, PatientCtrl.update);
+app.get('/patients/:id', PatientCtrl.show);
 
 app.get('/appointments', AppointmentCtrl.all);
 app.post('/appointments', appointmentValidation.create, AppointmentCtrl.create);
@@ -27,4 +28,4 @@ app.listen(6666, function(err) {
   console.log('Server running!');
 })
 
-// Разработка стоматологического приложения на React Native #4 | 1:06:50 / 2:36:48
+// Разработка стоматологического приложения на React Native #4 | 2:06:55 / 2:36:48

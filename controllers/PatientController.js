@@ -48,7 +48,7 @@ const update = async function(req, res) {
     });
   }
 
-  Patient.updateOne( { _id: patientId }, { $set: data }, function(err) {
+  Patient.updateOne( { _id: patientId }, { $set: data }, function(err, doc) {
     if (err) {
       return res.status(500).json({
         success: false,
@@ -95,6 +95,22 @@ const remove = async function(req, res) {
   })
 }
 
+const show = async function(req, res) {
+  const id = req.params.id;
+  try {
+    const patient = await Patient.findById(id).exec();
+    res.json({
+      status: 'success',
+      data: patient
+    })
+  } catch (e) {
+    return res.status(404).json({
+      success: false,
+      message: 'PATIENT_NOT_FOUND'
+    })
+  }
+}
+
 const all = function(req, res) {
   Patient.find({}, function(err, docs) {
     if (err) {
@@ -115,7 +131,8 @@ PatientController.prototype = {
   all,
   create,
   update,
-  remove
+  remove,
+  show
 }
 
 module.exports = PatientController;
