@@ -1,5 +1,6 @@
 const { validationResult } = require('express-validator');
 const dayjs = require('dayjs');
+
 const { Appointment, Patient } = require('../models');
 
 const { sendSMS } = require('../utils');
@@ -45,7 +46,7 @@ const create = async function(req, res) {
 
     const delayedTime = dayjs(`${data.date.split('.').reverse().join('.')}T${data.time}`).subtract(1, 'minute').unix();
 
-    delayedSMS({
+    sendSMS({
       number: patient.phone,
       time: delayedTime,
       text: `Добрый день, ${patient.fullname}! Сегодня в ${data.time} у Вас приём в стоматологию "Granit".`

@@ -28,4 +28,4 @@ app.listen(6666, function(err) {
   console.log('Server running!');
 })
 
-// Разработка стоматологического приложения на React Native #4 | 2:06:55 / 2:36:48
+// 2:08:00
