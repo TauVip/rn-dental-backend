@@ -1,5 +1,8 @@
 const express = require('express');
 const cors = require('cors');
+const dotenv = require('dotenv');
+
+dotenv.config();
 
 const db = require('./core/db');
 const { patientValidation, appointmentValidation } = require('./utils/validations');
@@ -28,4 +31,4 @@ app.listen(6666, function(err) {
   console.log('Server running!');
 })
 
-// 2:08:00
+// Разработка стоматологического приложения на React Native #5 | 11:59 / 2:46:48

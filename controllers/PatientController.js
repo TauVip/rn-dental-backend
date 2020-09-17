@@ -98,10 +98,11 @@ const remove = async function(req, res) {
 const show = async function(req, res) {
   const id = req.params.id;
   try {
-    const patient = await Patient.findById(id).exec();
+    const patient = await Patient.findById(id).populate('appointments').exec();
+
     res.json({
       status: 'success',
-      data: patient
+      data: { ...patient._doc, appointments: patient.appointments }
     })
   } catch (e) {
     return res.status(404).json({

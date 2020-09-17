@@ -44,17 +44,13 @@ const create = async function(req, res) {
       })
     }
 
-    const delayedTime = dayjs(`${data.date.split('.').reverse().join('.')}T${data.time}`).subtract(1, 'minute').unix();
+    const delayedTime = dayjs(`${data.date.split('.').reverse().join('-')}T${data.time}`).subtract(1, 'minute').unix();
 
     sendSMS({
       number: patient.phone,
       time: delayedTime,
-      text: `Добрый день, ${patient.fullname}! Сегодня в ${data.time} у Вас приём в стоматологию "Granit".`
-    }).then(({ data }) => {
-      console.log(data)
-    }).catch(err => {
-      console.log(err)
-    })
+      text: `Добрый день, ${patient.fullname}! Сегодня в ${data.time} у Вас приём к стоматологу`
+    });
 
     res.status(201).json({
       success: true,
