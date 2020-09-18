@@ -1,5 +1,6 @@
 const { validationResult } = require('express-validator');
 const dayjs = require('dayjs');
+const { groupBy, reduce } = require('lodash');
 
 const { Appointment, Patient } = require('../models');
 
@@ -44,7 +45,7 @@ const create = async function(req, res) {
       })
     }
 
-    const delayedTime = dayjs(`${data.date.split('.').reverse().join('-')}T${data.time}`).subtract(1, 'minute').unix();
+    const delayedTime = dayjs(`${data.date}T${data.time}`).subtract(1, 'minute').unix();
 
     sendSMS({
       number: patient.phone,
@@ -140,9 +141,16 @@ const all = function(req, res) {
 
       res.json({
         status: 'success',
-        data: docs
+        data: reduce(
+          groupBy(docs, 'date'),
+          (result, value, key) => {
+            result = [ ...result, { title: key, data: value } ]
+            return result
+          }, []
+        )
       })
-    })
+    }
+  )
 }
 
 AppointmentController.prototype = {
